@@ -1,0 +1,9 @@
+Annie Shen
+ashen7@ucsc.edu
+ID#1562848
+CMPE 12 - lab3
+
+Decimal Converter
+
+User enters a decimal number and the program will convert the value into 8-bit binary with 2^16-1 as max input value.
+
