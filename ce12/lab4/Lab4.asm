@@ -3,11 +3,8 @@
 TOP
 	AND R0,R0,0			;clear all registers
 	AND R1,R1,0
-
 	AND R2,R2,0
-
 	AND R3,R3,0
-
 	AND R4,R4,0
 	AND R5,R5,0
 	ST R1, FLAG
