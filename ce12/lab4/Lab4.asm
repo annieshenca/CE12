@@ -21,23 +21,6 @@ TOP
 	PUTS
 
 INPUT
-<<<<<<< HEAD
-	GETC				;get the inputted character and store into R0
-	OUT 				;print R0 to console
-	LD R1,LF			;load value of LF into R1
-	ADD R1,R0,R1 		;R1 = R0-10
-	BRz LF				;if R0 is LF, then branch to calculate FLAG's value
-	LD R1,E 	 		;load value of E(-69) into R1
-	ADD R1,R0,R1		;R1 = R0-69
-	BRz FLAG_E			;branch to FLAG_E to change FLAG to 1
-	LD R1,D 			;load value of D(-68) into R1
-	ADD R1,R0,R1 		;R1 = R0-68
-	BRz FLAG_D 			;branch to FLAG_D to change FLAG to -1
-	LD R1,X				;load value of X(-88) into R1
-	ADD R1,R0,R1		;R1 = R0-88
-	BRz INPUT			;if input is "X", let FLAG remain 0
-	BRnp TOP			;branch to TOP to restart if the user entered in something not expected
-=======
 	GETC
 	OUT
 	
@@ -61,7 +44,6 @@ INPUT
 	ADD R1,R0,R1		;R1 = R0-88
 	BRz INPUT		;if input is "X", let FLAG remain 0
 	BRnp TOP		;branch to TOP to restart if input was invaild
->>>>>>> f3dd0ae0be2d07f3cc5a32fe1d8902bbaa81ee26
 
 FLAG_E
 	LD R1,FLAG		;laod value of FLAG(0) into R1
@@ -70,18 +52,11 @@ FLAG_E
 	BRnzp INPUT
 
 FLAG_D
-<<<<<<< HEAD
-	LD R1,FLAG			;laod value of FLAG(0) into R1
-	ADD R1,R1,-1 		;R1 = R1-1 = -1
-	ST R1,FLAG			;store value of R1 into FLAG
-	BRnzp INPUT			;branch back to INPUT
-=======
 	LD R1,FLAG		;laod value of FLAG(0) into R1
 	ADD R1,R1,1 		;R1 = R1+1 = 1
 	NOT R1,R1		;R1 = !R1 -> = -1
 	ST R1,FLAG		;store value of R1 into FLAG
 	BRnzp INPUT
->>>>>>> f3dd0ae0be2d07f3cc5a32fe1d8902bbaa81ee26
 
 LF
 	LD R1, FLAG 		;load value of FLAG into R1
@@ -146,13 +121,6 @@ EXIT
 HALT
 
 ;Variables
-<<<<<<< HEAD
-E 		.FILL #-69
-D 		.FILL #-68
-X 		.FILL #-88
-FLAG	.FILL #0
-CIPHER	.FILL #0
-=======
 ENTER	.FILL #-10		;ASCII value of LF
 E 	.FILL #-69
 D 	.FILL #-68
@@ -162,22 +130,10 @@ ONE	.FILL #49
 CIPHER	.FILL #0
 INT	.FILL #0
 NEGZERO	.FILL #-48
->>>>>>> f3dd0ae0be2d07f3cc5a32fe1d8902bbaa81ee26
 NEGA	.FILL #-65
 NEGZ	.FILL #-90
 NEGa 	.FILL #-97
 NEGz 	.FILL #-122
-<<<<<<< HEAD
-ARRAY	.BLKW 400
-WEL		.STRINGZ "Welcome to Annie's Caesar Cipher program\n"
-PROMPT	.STRINGZ "Do you want to (E)ncrypt, (D)ecrypt, or (E)xit?\n"
-ASKCI	.STRINGZ "What is the cipher(1-25)?\n"
-ASK		.STRINGZ "What is the string(200 characters max)?\n"
-RESD	.STRINGZ "Here is your string and the decrypted result:\n"
-RESE	.STRINGZ "Here is your string and the encrypted result:\n"
-ENC 	.STRINGZ "<Encrypted> "
-DEC 	.STRINGZ "\n<Decrypted> "
-=======
 R0SAVE	.FILL #0
 R1SAVE	.FILL #0
 R2SAVE	.FILL #0
@@ -193,7 +149,6 @@ ASKSTR	.STRINGZ "What's the string(200 characters max)?\n"
 ;RESD 	.STRINGZ "Here is your string and the result:\n"
 ;ENC 	.STRINGZ "<Encrypted> "
 ;DEC 	.STRINGZ "\n<Decrypted> "
->>>>>>> f3dd0ae0be2d07f3cc5a32fe1d8902bbaa81ee26
 EMPT	.STRINGZ "\n"
 BYE 	.STRINGZ "Goodbye!"
 
