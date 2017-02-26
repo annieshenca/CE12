@@ -14,24 +14,19 @@ TOP
 
 INPUT
 	GETC				;get the inputted character and store into R0
-	OUT
+	OUT 				;print R0 to console
 	LD R1,LF			;load value of LF into R1
-
-	ADD R1,R0,R1
-
+	ADD R1,R0,R1 		;R1 = R0-10
 	BRz LF				;if R0 is LF, then branch to calculate FLAG's value
-	
 	LD R1,E 	 		;load value of E(-69) into R1
 	ADD R1,R0,R1		;R1 = R0-69
-
 	BRz FLAG_E			;branch to FLAG_E to change FLAG to 1
 	LD R1,D 			;load value of D(-68) into R1
 	ADD R1,R0,R1 		;R1 = R0-68
 	BRz FLAG_D 			;branch to FLAG_D to change FLAG to -1
-	
 	LD R1,X				;load value of X(-88) into R1
 	ADD R1,R0,R1		;R1 = R0-88
-	BRz INPUT			;if input is "X", let FLAG remain 0, then branch to INPUT
+	BRz INPUT			;if input is "X", let FLAG remain 0
 	BRnp TOP			;branch to TOP to restart if the user entered in something not expected
 
 FLAG_E
@@ -41,7 +36,7 @@ FLAG_E
 	BRnzp INPUT			;branch back to INPUT
 
 FLAG_D
-	LD R1,FLAG		;laod value of FLAG(0) into R1
+	LD R1,FLAG			;laod value of FLAG(0) into R1
 	ADD R1,R1,-1 		;R1 = R1-1 = -1
 	ST R1,FLAG			;store value of R1 into FLAG
 	BRnzp INPUT			;branch back to INPUT
@@ -66,19 +61,20 @@ EXIT
 HALT
 
 ;Variables
-WEL	.STRINGZ "Welcome to Annie's Caesar Cipher program\n"
-PROMPT	.STRINGZ "Do you want to (E)ncrypt, (D)ecrypt, or (E)xit?\n"
-E 	.FILL #-69
-D 	.FILL #-68
-X 	.FILL #-88
+E 		.FILL #-69
+D 		.FILL #-68
+X 		.FILL #-88
 FLAG	.FILL #0
-ASKCI	.STRINGZ "What is the cipher(1-25)?\n"
 CIPHER	.FILL #0
-ASK	.STRINGZ "What is the string(200 characters max)?\n"
 NEGA	.FILL #-65
 NEGZ	.FILL #-90
 NEGa 	.FILL #-97
 NEGz 	.FILL #-122
+ARRAY	.BLKW 400
+WEL		.STRINGZ "Welcome to Annie's Caesar Cipher program\n"
+PROMPT	.STRINGZ "Do you want to (E)ncrypt, (D)ecrypt, or (E)xit?\n"
+ASKCI	.STRINGZ "What is the cipher(1-25)?\n"
+ASK		.STRINGZ "What is the string(200 characters max)?\n"
 RESD	.STRINGZ "Here is your string and the decrypted result:\n"
 RESE	.STRINGZ "Here is your string and the encrypted result:\n"
 ENC 	.STRINGZ "<Encrypted> "
