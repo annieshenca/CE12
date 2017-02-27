@@ -1,6 +1,8 @@
 ;Annie Shen
 ;CMPE 12 - Caesar Cipher
 ;ROW major
+;Decrypt start at ARRAY memory location 1, ends at 200.
+;Encrypt start at 201, ends at 400
 
 .ORIG x3000
 
@@ -108,6 +110,11 @@ STRING
 	ADD R3,R3,1	;character input counter
 	BRnzp STRING
 
+RESULT
+	LD R0,RESD		;"Here is your string and the result: "
+	PUTS
+	JSR PRINT_ARRAY	;subroutine -> print out dec and enc messages
+
 DONE
 	LD R0,EMPT
 	OUT
@@ -134,7 +141,7 @@ UPPA	.FILL #-65
 UPPZ	.FILL #-90
 LOWA 	.FILL #-97
 LOWZ 	.FILL #-122
-EN_INDEX.FILL #200		;Encrypted part of the array starts at location 200
+EN_INDEX.FILL #200		;Encrypted part of the array starts at location 201
 TOTAL	.FILL #400
 R0SAVE	.FILL #0		;for subroutines
 R1SAVE	.FILL #0
@@ -148,9 +155,9 @@ WEL		.STRINGZ "Welcome to my Caesar Cipher program\n"
 PROMPT	.STRINGZ "Do you want to (E)ncrypt, (D)ecrypt, or e(X)it?\n"
 ASKCI	.STRINGZ "What's the cipher(1-25)?\n"
 ASKSTR	.STRINGZ "What's the string(200 characters max)?\n"
-;RESD 	.STRINGZ "Here is your string and the result:\n"
-;ENC 	.STRINGZ "<Encrypted> "
-;DEC 	.STRINGZ "\n<Decrypted> "
+RESD 	.STRINGZ "Here is your string and the result:\n"
+DEC 	.STRINGZ "<Decrypted> "
+ENC 	.STRINGZ "<Encrypted> "
 EMPT	.STRINGZ "\n"
 BYE 	.STRINGZ "Goodbye!"
 
@@ -167,7 +174,10 @@ STORE
 ;loads a byte of data from array------------------------------------
 LOAD
 
+
+	RET
 ;end LOAD-----------------------------------------------------------
+
 
 ;takes a chara and cipher as input & return the enc. value----------
 ENCRYPT
@@ -178,12 +188,12 @@ ENCRYPT
 	ST R4,R0SAVE
 	ST R5,R0SAVE
 	ST R6,R0SAVE
-	ST R7,R0SAVE
+	;ST R7,R0SAVE
 	
-
 
 	RET
 ;end ENCRYPT----------------------------------------------------------
+
 
 ;takes a enc. chara and cipher as input & return the dec.-------------
 DECRYPT
@@ -191,24 +201,40 @@ DECRYPT
 
 ;end DECRYPT----------------------------------------------------------
 
+
 ;prints the array out-------------------------------------------------
 PRINT_ARRAY
+	LEA R0,DEC 			;"<Decrypted> "
+	PUTS				
+	LEA R0,ARRAY 		;load ARRAY pointer to front. which is the start of dec message
+	PUTS				;PUTS will print until reaches NULL
 
+	LEA R0,EMPT 		;"\n"
+	PUTS
 
+	LEA R0,ENC 			;"<Encrypted> "
+	PUTS
+	LEA R0,ARRAY 		;reload to point to beginning
+	LD R2,EN_INDEX		;R2 = 200
+	ADD R0,R0,R2 		;R0 = 1(1st mem location) + 200 = 201 <-start of enc message
+	PUTS				;print from mem location 201 until reaches NULL
+
+	RET
 ;end PRINT_ARRAY------------------------------------------------------
 
 
 ;reset array to empty state-------------------------------------------
 CLEAR_ARRAY
-	LD R1, TOTAL		;R1 = 400. Counter for RESET
-
+	LD R1, TOTAL		;R1 = 400. Counter for label RESET
+	AND R2,R2,0			;clear R2
 RESET
-	LEA R2,ARRAY 		;load ARRAY pointer to front
-	STR R2,R1,0			;store R0=0 into current mem location of R2
-	ADD R1,R1,-1
+	LEA R3,ARRAY 		;load ARRAY pointer to front
+	STR R2,R3,0			;store R=0 into current mem location of R2
+	ADD R3,R3,1			;move R3 point to next mem location
+	ADD R1,R1,-1		;decrement counter
 	BRp RESET
 
-RET
+	RET
 ;end CLEAR_ARRAY------------------------------------------------------
 ;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
