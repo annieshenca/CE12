@@ -96,8 +96,8 @@ STRINGQ
 	PUTS
 
 STRING
-	GETC
-	PUTC
+	GETC			;getting user input string
+	OUT
 	
 	LD R1,ENTER
 	ADD R1,R0,R1
@@ -111,6 +111,7 @@ STRING
 DONE
 	LD R0,EMPT
 	OUT
+	JSR CLEAR_ARRAY	;Resets all memory in ARRAY
 	BRnzp TOP		;Head to label TOP and ask for E/D/X again
 
 EXIT
@@ -122,19 +123,20 @@ HALT
 
 ;Variables
 ENTER	.FILL #-10		;ASCII value of LF
-E 	.FILL #-69
-D 	.FILL #-68
-X 	.FILL #-88
+E 		.FILL #-69
+D 		.FILL #-68
+X 		.FILL #-88
 FLAG	.FILL #0
-ONE	.FILL #49
+ONE		.FILL #49
 CIPHER	.FILL #0
-INT	.FILL #0
 NEGZERO	.FILL #-48
-NEGA	.FILL #-65
-NEGZ	.FILL #-90
-NEGa 	.FILL #-97
-NEGz 	.FILL #-122
-R0SAVE	.FILL #0
+UPPA	.FILL #-65
+UPPZ	.FILL #-90
+LOWA 	.FILL #-97
+LOWZ 	.FILL #-122
+EN_INDEX.FILL #200		;Encrypted part of the array starts at location 200
+TOTAL	.FILL #400
+R0SAVE	.FILL #0		;for subroutines
 R1SAVE	.FILL #0
 R2SAVE	.FILL #0
 R3SAVE	.FILL #0
@@ -142,7 +144,7 @@ R4SAVE	.FILL #0
 R5SAVE	.FILL #0
 R6SAVE	.FILL #0
 R7SAVE	.FILL #0
-WEL	.STRINGZ "Welcome to my Caesar Cipher program\n"
+WEL		.STRINGZ "Welcome to my Caesar Cipher program\n"
 PROMPT	.STRINGZ "Do you want to (E)ncrypt, (D)ecrypt, or e(X)it?\n"
 ASKCI	.STRINGZ "What's the cipher(1-25)?\n"
 ASKSTR	.STRINGZ "What's the string(200 characters max)?\n"
@@ -153,18 +155,21 @@ EMPT	.STRINGZ "\n"
 BYE 	.STRINGZ "Goodbye!"
 
 ;Subroutines
-;---------------------------------------------------------------------
+;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
-;take byte of data and store into array
+;take byte of data and store into array-----------------------------
 STORE
 	ST R0,ROSAVE
 	RET
+;end STORE----------------------------------------------------------
 
-;loads a byte of data from array
+
+;loads a byte of data from array------------------------------------
 LOAD
 
+;end LOAD-----------------------------------------------------------
 
-;takes a character and cipher as input and return the encrypted value
+;takes a chara and cipher as input & return the enc. value----------
 ENCRYPT
 	ST R0,R0SAVE
 	ST R1,R0SAVE
@@ -178,16 +183,34 @@ ENCRYPT
 
 
 	RET
+;end ENCRYPT----------------------------------------------------------
 
-;takes a encrypted character and cipher as input and return the decrypted value
+;takes a enc. chara and cipher as input & return the dec.-------------
 DECRYPT
 
 
-;prints the array out
+;end DECRYPT----------------------------------------------------------
+
+;prints the array out-------------------------------------------------
 PRINT_ARRAY
 
 
-;---------------------------------------------------------------------
+;end PRINT_ARRAY------------------------------------------------------
+
+
+;reset array to empty state-------------------------------------------
+CLEAR_ARRAY
+	LD R1, TOTAL		;R1 = 400. Counter for RESET
+
+RESET
+	LEA R2,ARRAY 		;load ARRAY pointer to front
+	STR R2,R1,0			;store R0=0 into current mem location of R2
+	ADD R1,R1,-1
+	BRp RESET
+
+RET
+;end CLEAR_ARRAY------------------------------------------------------
+;\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
 ARRAY	.BLKW 400
 
