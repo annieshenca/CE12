@@ -31,15 +31,15 @@ INPUT
 	ADD R1,R0,R1		;R1 = R0-10
 	BRz LF			;if R0 is LF
 	
-	;input == E?
-	LD R1,E 	 	;load value of E(-69) into R1
-	ADD R1,R0,R1		;R1 = R0-69
-	BRz FLAG_E		;branch to FLAG_E to change FLAG to 1
-	
 	;input == D?
 	LD R1,D 		;load value of D(-68) into R1
 	ADD R1,R0,R1 		;R1 = R0-68
-	BRz FLAG_D 		;branch to FLAG_D to change FLAG to -1
+	BRz FLAG_D 		;branch to FLAG_D to change FLAG to 1
+
+	;input == E?
+	LD R1,E 	 	;load value of E(-69) into R1
+	ADD R1,R0,R1		;R1 = R0-69
+	BRz FLAG_E		;branch to FLAG_E to change FLAG to -1
 	
 	;input == X?
 	LD R1,X			;load value of X(-88) into R1
@@ -47,15 +47,16 @@ INPUT
 	BRz INPUT		;if input is "X", let FLAG remain 0
 	BRnp TOP		;branch to TOP to restart if input was invaild
 
-FLAG_E
+FLAG_D
 	LD R1,FLAG		;laod value of FLAG(0) into R1
 	ADD R1,R1,1 		;R1 = R1+1 = 1
 	ST R1,FLAG		;store value of R1 into FLAG
 	BRnzp INPUT
 
-FLAG_D
+
+FLAG_E
 	LD R1,FLAG		;laod value of FLAG(0) into R1
-	ADD R1,R1,1 		;R1 = R1+1 = 1
+	ADD R1,R1,1 	;R1 = R1+1 = 1
 	NOT R1,R1		;R1 = !R1 -> = -1
 	ST R1,FLAG		;store value of R1 into FLAG
 	BRnzp INPUT
@@ -90,10 +91,11 @@ C_CALC
 	BRnzp CIPH
 
 STRINGQ
-	AND R1,R1,0		;clear registers
+	AND R1,R1,0			;clear registers
 	AND R2,R2,0
 	AND R3,R3,0
-	LEA R2,ARRAY		;R2 = 1st address of ARRAY
+	AND R4,R4,0
+	LEA R2,ARRAY		;R1 = 1st address of ARRAY
 	LEA R0,ASKSTR		;"What's the string?"
 	PUTS
 
@@ -103,12 +105,27 @@ STRING
 	
 	LD R1,ENTER
 	ADD R1,R0,R1
-	BRz DONE	;TESTING;if input is LF
+	BRz NULL		;if input == LF, branch to add NULL at end of string & print results
 	
-	JSR STORE	;subroutine to STORE
-	ADD R2,R2,1	;move to next ARRAY memory location
-	ADD R3,R3,1	;character input counter
+	LD R1,FLAG
+	ADD R1,R1,1
+	BRnp DE			;if R1+1 = positive -> Decryption
+	BRz EN			;if R1+1 = zero -> Encryption
+
+DE
+	JSR DECRYPT
+	ADD R2,R2,1		;move to next ARRAY memory location
+	ADD R3,R3,1		;character input counter
 	BRnzp STRING
+
+EN
+	JSR ENCRYPT
+	ADD R2,R2,1		;move to next ARRAY memory location
+	ADD R3,R3,1		;character input counter
+	BRnzp STRING
+
+NULL
+	LEA R2
 
 RESULT
 	LD R0,RESD		;"Here is your string and the result: "
@@ -167,6 +184,16 @@ BYE 	.STRINGZ "Goodbye!"
 ;take byte of data and store into array-----------------------------
 STORE
 	ST R0,ROSAVE
+	ST R1,ROSAVE
+	ST R2,ROSAVE	;ARRAY mem location
+	ST R3,ROSAVE	;chara counter
+
+
+
+	LD R0,ROSAVE
+	LD R1,ROSAVE
+	LD R2,ROSAVE
+	LD R3,ROSAVE
 	RET
 ;end STORE----------------------------------------------------------
 
@@ -183,21 +210,68 @@ LOAD
 ENCRYPT
 	ST R0,R0SAVE
 	ST R1,R0SAVE
-	ST R2,R0SAVE
-	ST R3,R0SAVE
+	ST R2,R0SAVE	;ARRAy mem location
+	ST R3,R0SAVE	;character input counter
 	ST R4,R0SAVE
 	ST R5,R0SAVE
 	ST R6,R0SAVE
-	;ST R7,R0SAVE
-	
 
+
+
+
+
+
+
+
+
+
+
+
+
+	LD R0,R0SAVE
+	LD R1,R0SAVE
+	LD R2,R0SAVE
+	LD R3,R0SAVE
+	LD R4,R0SAVE
+	LD R5,R0SAVE
+	LD R6,R0SAVE
 	RET
 ;end ENCRYPT----------------------------------------------------------
 
 
 ;takes a enc. chara and cipher as input & return the dec.-------------
 DECRYPT
+	ST R0,R0SAVE
+	ST R1,R0SAVE
+	ST R2,R0SAVE
+	ST R3,R0SAVE
+	ST R4,R0SAVE
+	ST R5,R0SAVE
+	ST R6,R0SAVE
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	LD R0,R0SAVE
+	LD R1,R0SAVE
+	LD R2,R0SAVE
+	LD R3,R0SAVE
+	LD R4,R0SAVE
+	LD R5,R0SAVE
+	LD R6,R0SAVE
+	RET
 
 ;end DECRYPT----------------------------------------------------------
 
