@@ -1,0 +1,19 @@
+Annie Shen
+ashen7@ucsc.edu
+ID#1562848
+CMPE 12/L
+Section 1D - Maxwell Lichtenstein
+Lab 5 - Introduction to UNO 32 and MIP
+
+Table of Contents:
+   - Lab5Part1.s
+   - Lab5Part2.s
+   - Lab5_report.txt
+
+MIPS was not too hard to me to learn and get used to because it’s a mix of what I’ve learn from
+LC-3  and the C language. The few things that confused me at first were the different TRIS and PORT for buttons and switches on UNO32 kit, but after attending multiple lab sections and asking lab
+tutors I finally understood and was able to go through the whole lab 5 smoothly.
+Part 1 of the lab was easy to complete once I understood the buttons, switches, and LED’s positions
+in binary, and how to shift them. The confusing portion of Part 2 was the jump to subroutine and return back to original spot, but once I got over that, the rest of the idea was not too hard.
+Attending multiple lab sections was really helpful, as I was able to hear different lab tutors’
+explanation, and get my questions answered instead of being frustrated by myself.
